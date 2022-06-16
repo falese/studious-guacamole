@@ -1,0 +1,664 @@
+---
+swagger: "2.0"
+info:
+  description: "People API allows Calendly feature teams to build experiences to create more meaningful connections between people:
+                Current Customers and Users
+                Meeting guests
+                Synchronized Contacts of Calendly Users
+                Organizations of any size, structure or lifecycle
+                  
+                The platform enabled by this API provides data and operations to:
+                Associate User supplied contacts with other known users of Calendly
+                Build groups of users, contacts, and other logical arrangements of people known to our platform.
+                Synchronize people data directly with organizational, and other models already existent in customer systems using LDAP, CRM systems or a simple address book.
+                "
+  version: "0.0.1"
+  title: "People API"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "user1@user.com"
+  license:
+    name: ""
+    url: ""
+host: "contact.something.io"
+basePath: "/v2"
+tags:
+- name: "contact"
+  description: "Make it easy for users to get contacts into Calendly"
+  externalDocs:
+    description: "Find out more about our Contact Services"
+    url: "http://swagger.io"
+- name: "user"
+  description: "Manage the complete lifecycle of a Calendly User"
+  externalDocs:
+    description: "Find out more about our User Servics"
+    url: "http://swagger.io"
+- name: "organization"
+  description: "Enable users to build, manage, entitle and customize organizations of Calendly Users and Contacts"
+  externalDocs:
+    description: "Find out more about our Org Services"
+    url: "http://swagger.io"
+schemes:
+- "https"
+- "http"
+paths:
+  /contact:
+    post:
+      tags:
+      - "contact"
+      summary: "Add a contact"
+      description: ""
+      operationId: "createContact"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Contact object"
+        required: true
+        schema:
+          $ref: "#/definitions/Contact"
+      security:
+      - contactstore_auth:
+        - "write:contacts"
+        - "read:contacts"
+      responses:
+        "405":
+          description: "Invalid input"
+      x-swagger-router-controller: "Contact"
+    put:
+      tags:
+      - "contact"
+      summary: "Update an existing contact"
+      description: ""
+      operationId: "updateContact"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Contact object"
+        required: true
+        schema:
+          $ref: "#/definitions/Contact"
+      security:
+      - contactstore_auth:
+        - "write:contacts"
+        - "read:contacts"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "contact not found"
+        "405":
+          description: "Validation exception"
+      x-swagger-router-controller: "Contact"
+  /contact/findByEmail:
+    get:
+      tags:
+      - "contact"
+      summary: "Finds Contacts by email address"
+      description: "Multiple email values can be provided with comma separated strings"
+      operationId: "findcontactsByEmail"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "status"
+        in: "query"
+        description: "Email address values that need to be considered for filter"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      security:
+      - contactstore_auth:
+        - "write:contacts"
+        - "read:contacts"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Contact"
+        "400":
+          description: "Invalid status value"
+      x-swagger-router-controller: "Contact"
+  /contact/findByTags:
+    get:
+      tags:
+      - "contact"
+      summary: "Finds contacts by tags"
+      description: "Muliple tags can be provided with comma separated strings. Use\
+        \         tag1, tag2, tag3 for testing."
+      operationId: "findcontactsByTags"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "Tags to filter by"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      security:
+      - contactstore_auth:
+        - "write:contacts"
+        - "read:contacts"
+      deprecated: true
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Contact"
+        "400":
+          description: "Invalid tag value"
+      x-swagger-router-controller: "Contact"
+  /contact/{contactId}:
+    get:
+      tags:
+      - "contact"
+      summary: "Find contact by ID"
+      description: "Returns a single contact"
+      operationId: "getcontactById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "contactId"
+        in: "path"
+        description: "ID of contact to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Contact"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "contact not found"
+      x-swagger-router-controller: "Contact"
+    post:
+      tags:
+      - "contact"
+      summary: "Updates a contact in the store with form data"
+      description: ""
+      operationId: "updatecontactWithForm"
+      consumes:
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contactId"
+        in: "path"
+        description: "ID of contact that needs to be updated"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "name"
+        in: "formData"
+        description: "Updated name of the contact"
+        required: false
+        type: "string"
+      - name: "status"
+        in: "formData"
+        description: "Updated status of the contact"
+        required: false
+        type: "string"
+      security:
+      - contactstore_auth:
+        - "write:contacts"
+        - "read:contacts"
+      responses:
+        "405":
+          description: "Invalid input"
+      x-swagger-router-controller: "Contact"
+    delete:
+      tags:
+      - "contact"
+      summary: "Deletes a contact"
+      description: ""
+      operationId: "deletecontact"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "contactId"
+        in: "path"
+        description: "contact id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      security:
+      - contactstore_auth:
+        - "write:contacts"
+        - "read:contacts"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "contact not found"
+      x-swagger-router-controller: "Contact"
+  /contact/{contactId}/uploadImage:
+    post:
+      tags:
+      - "contact"
+      summary: "uploads an image"
+      description: ""
+      operationId: "uploadFile"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contactId"
+        in: "path"
+        description: "ID of contact to update"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "additionalMetadata"
+        in: "formData"
+        description: "Additional data to pass to server"
+        required: false
+        type: "string"
+      - name: "file"
+        in: "formData"
+        description: "file to upload"
+        required: false
+        type: "file"
+      security:
+      - contactstore_auth:
+        - "write:contacts"
+        - "read:contacts"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "Contact"
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      description: "This can only be done by the logged in user."
+      operationId: "createUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "User"
+  /user/createWithArray:
+    post:
+      tags:
+      - "user"
+      summary: "Creates list of users with given input array"
+      description: ""
+      operationId: "createUsersWithArrayInput"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "List of user object"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "User"
+  /user/createWithList:
+    post:
+      tags:
+      - "user"
+      summary: "Creates list of users with given input array"
+      description: ""
+      operationId: "createUsersWithListInput"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "List of user object"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "User"
+  /user/login:
+    get:
+      tags:
+      - "user"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "The user name for login"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login in clear text"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+          schema:
+            type: "string"
+        "400":
+          description: "Invalid username/password supplied"
+      x-swagger-router-controller: "User"
+  /user/logout:
+    get:
+      tags:
+      - "user"
+      summary: "Logs out current logged in user session"
+      description: ""
+      operationId: "logoutUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "User"
+  /user/{username}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by user name"
+      description: ""
+      operationId: "getUserByName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The name that needs to be fetched. Use user1 for testing. "
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+      x-swagger-router-controller: "User"
+    put:
+      tags:
+      - "user"
+      summary: "Updated user"
+      description: "This can only be done by the logged in user."
+      operationId: "updateUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "name that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+      x-swagger-router-controller: "User"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+      x-swagger-router-controller: "User"
+  /user/findByEmail:
+    get:
+        tags:
+        - "user"
+        summary: "Get user by email address"
+        description: ""
+        operationId: "findUserByEmail"
+        produces:
+        - "application/json"
+        parameters:
+        - name: "email"
+          in: "query"
+          description: "The email used to fetch a user. Use user1@user.com for testing. "
+          required: true
+          type: "string"
+        responses:
+          "200":
+            description: "successful operation"
+            schema:
+              $ref: "#/definitions/User"
+          "400":
+            description: "Invalid email supplied"
+          "404":
+            description: "User not found"
+        x-swagger-router-controller: "User"
+  /organization:
+    post:
+      tags:
+      - "organization"
+      summary: "Add an Organization"
+      description: ""
+      operationId: "createOrganization"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Organization object"
+        required: true
+        schema:
+          $ref: "#/definitions/Organization"
+      responses:
+        "405":
+          description: "Invalid input"
+      x-swagger-router-controller: "Organization"
+
+securityDefinitions:
+  contactstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://contactstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:contacts: "modify contacts in your account"
+      read:contacts: "read your contacts"
+definitions:
+  Organization:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+      phone:
+        type: "string"
+      userStatus:
+        type: "integer"
+        format: "int32"
+        description: "User Status"
+    example:
+      firstName: "firstName"
+      lastName: "lastName"
+      password: "password"
+      userStatus: 6
+      phone: "phone"
+      id: 0
+      email: "email"
+      username: "username"
+  Tag:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Tag"
+    example:
+      name: "name"
+      id: 6
+  Contact:
+    type: "object"
+    required:
+    - "name"
+    - "photoUrls"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+        example: "Sean Falese"
+      email:
+        type: "string"
+        example: "user1@user.com"
+      photoUrls:
+        type: "array"
+        items:
+          type: "string"
+      tags:
+        type: "array"
+        items:
+          $ref: "#/definitions/Tag"
+      contactType:
+        type: "string"
+        description: "contact type"
+        enum:
+        - "basic"
+        - "calendly user"
+        - "synchronized"
+      source:
+        type: "string"
+        description: "Contact Source"
+        enum:
+        - "Calendly"
+        - "Google Address"
+        - "LDAP"
+    example:
+      photoUrls:
+      - "photoUrls"
+      - "photoUrls"
+      name: "Sean Falese"
+      contactType: "calendly user"
+      email: "user1@user.com"
+      source: "LDAP"
+      id: 0
+      tags:
+      - name: "name"
+        id: 6
+      - name: "name"
+        id: 6
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+    example:
+      code: 0
+      type: "type"
+      message: "message"
+externalDocs:
+  description: ""
+  url: ""

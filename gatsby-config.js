@@ -8,19 +8,26 @@ module.exports = {
     options: {
       "icon": "src/images/icon.png"
     }
-  }, "gatsby-plugin-mdx", {
+  }, "gatsby-plugin-mdx", 
+    {
     resolve: 'gatsby-source-filesystem',
     options: {
       "name": "pages",
       "path": "./src/pages/"
     },
-    
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        "name": "docs",
-        "path": "./docs/"
-      },
+    resolve: 'gatsby-source-filesystem',
+    options: {
+      "name": "docs",
+      "path": "./docs/"
+    },
+
     __key: "pages"
-  },"gatsby-plugin-image",
+  },"gatsby-plugin-image",{
+  resolve: 'gatsby-source-filesystem',
+  options: {
+    "name": "specs",
+    "path": "./specs/"
+  },
+},
   "gatsby-plugin-sharp",]
 };
