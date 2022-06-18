@@ -14,7 +14,7 @@ const DocPage = ({ data }) => {
         {data.mdx.body}
         
       </MDXRenderer>
-      <SpecPage url={`http://localhost:8000${data.mdx.frontmatter.attachments[0].publicURL}`}></SpecPage>
+      <SpecPage url={`${process.env.GATSBY_HOST}${data.mdx.frontmatter.attachments[0].publicURL}`}></SpecPage>
     </Layout>
   
   )
