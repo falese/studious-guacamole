@@ -17,6 +17,7 @@
   "dependencies": {
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
+    "dotenv": "^16.0.1",
     "gatsby": "^4.16.0",
     "gatsby-plugin-image": "^2.16.1",
     "gatsby-plugin-manifest": "^4.16.0",
@@ -25,6 +26,7 @@
     "gatsby-plugin-sitemap": "^5.16.0",
     "gatsby-source-filesystem": "^4.16.0",
     "react": "^18.1.0",
-    "react-dom": "^18.1.0"
+    "react-dom": "^18.1.0",
+    "swagger-ui-react": "^4.12.0"
   }
 }
