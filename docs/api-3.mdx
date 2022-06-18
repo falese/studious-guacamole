@@ -1,47 +1,51 @@
 ---
-title: "Good Docs API template version 1"
+title: "Document Library API"
 date: "2022-06-14"
 meta: "find this thing online"
+attachments:
+    - "../specs/api-3.yaml"
 ---
 
-# Endpoint name
+# The overview
 
-Method | syntax
------ | ----------
-GET | base_url/endpoint/etc.
+## When do I need an overview
 
-<!-- Delete this comment after you have replaced the method and syntax above. -->
+Your API documentation should include an overview document. This document tells potential users or buyers what they might want to know before they buy.
 
-## Description
+Users can install or connect to your service if they are already familiar with it, or if someone else has decided that the team will use this solution. Those readers will go to your Quick Start Guide, or get straight to work.
 
-<!-- Enter a short description. What is it for, and what can it do? -->
+Other readers need to assess your product to decide whether they want to use it. This includes managers responsible for a business decision, or engineers responsible for a technical assessment of your product. People in these groups might decide to not adopt your product unless you provide an overview that answers their questions.
 
-Parameters
+## Content of your overview
 
-Name | type | Req. | Description
----- | ----- | ----- | --------------------
-Parameter_one | string | Y |  Stores the customer name
-Parameter_two | int  | N | Stores a postal code, like the U.S. ZIP code.
+### Who is this overview for
 
-<!-- Replace the two example rows and include rows for all your parameters. -->
-<!-- If one of the parameters has a set of sub-parameters, create a table or bulleted list for that, but proceed with caution. If the API is complex, there might be an easier way to do your reference section than writing markup by hand. -->
+* Are you writing for developers or for managers?
+* Are you writing for people who have a certain problem to solve?
+* Are you writing for a particular industry or market segment?
 
-## Examples
+### Body of the overview
 
-### Request
+Contains information that helps the reader get oriented to the API. Answers these questions:
 
-```HTTP
-<!--  A copy-and-paste working request, if possible. Not one with values replaced by their names, such as "ID." -->
+* What is it supposed to do? (What problem does it solve, and for whom?)
+* What exact capabilities are available to the user? What services does it offer?
+* What does it not do that developers should know about?
+* What are the typical use cases?
+* How does it work? (What do users need to know about architecture an internal components?)
+* What dependencies does the developer need to know about before installing?
+* What technical requirements do readers need? Include development environment and licensing requirements.
+* What knowledge prerequisites does the developer need to know about before using the API?
 
-```
+### Post-requisites
 
-<!-- Follow with comments to explain what each part of the request is doing -->
+* What comes next? Do you want to direct users to the Quick Start to try it out?
+* How to get started with the API?
 
-### Response
+## More information
 
-```HTTP
-<!--  An actual response returned by this endpoint for the request above.  -->
+### Overview examples
 
-```
+* **Chrome Native Client**. [The Native Client Technical Overview](https://developer.chrome.com/native-client/overview) explains an engine that allows C++ to run in the browser, including why it's a good solution for engineers who want to rework a desktop app and make it usable as a web app.
 
-<!-- Write a comment explaining the response, if it would be helpful. For a response with a complicated schema, create a table like the one used above for the request.  -->
+* **The Jira Platform**. [This overview of the Jira Platform](https://www.atlassian.com/software/jira/guides/getting-started/overview#about-the-jira-platform) does a good job of explaining products and the associated use cases, third-party integrations, hosting options, and licensing.
