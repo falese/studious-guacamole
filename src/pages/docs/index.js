@@ -22,7 +22,7 @@ const Doc = ({ data }) => {
 }
 export const query = graphql`
   query {
-    allMdx{
+    allMdx(filter: {frontmatter: {meta: {eq: "doc"}}}) {
       nodes {
         frontmatter {
           title

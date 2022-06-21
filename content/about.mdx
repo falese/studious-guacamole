@@ -1,0 +1,52 @@
+---
+title: "About"
+date: "2022-06-14"
+meta: "content"
+attachments:
+---
+
+
+
+## Concept
+I wanted to see if I could develop an API documentation page using only MD files and react.
+
+Gatsbyjs is an open source framework for generating static pages, my takeaways are:
+
+* It simplifies the creation of routes by creating a route for every file in the Pages folder.
+* It leverages GraphQL middleware layer to query for data and content.
+* Plugins are available which extend its functionality.  In this App i'm using an MDX renderer and a file source and system plugin 
+* It really likes git and integrates extremely smoothly for CI/CD.
+
+## POC Architecture
+
+This app is based upon the [tutorial](https://www.gatsbyjs.com/docs/tutorial/) with some modifications.
+
+Each page is a high level React component, with some leveraging GraphQL queries for automatically rendering content from and MDX file.
+
+I've also integrated [swagger-ui-react](https://github.com/swagger-api/swagger-ui/tree/master/flavors/swagger-ui-react) to consume YAML specs downloaded from the [BIAN semantic APIs tools](https://bian.org/semantic-apis/).
+
+### Content Generation
+I've created two file sources:
+* One for MDX files containing API overview business content
+* One for YAML Specs 
+
+The MDX file front matter structure is
+
+```
+---
+title: "About"
+date: "2022-06-14"
+meta: "content"
+attachments: 
+---
+```
+
+
+The frontmatter section represents meta data that represents useful elements or data regarding the content model.  These attributes can be queried directly in GraphQL or filtered.  Additionally the React component for documentation pages is a generic component that is configured to retrieve and display the appropriate content from the MDX based upon the id of the file pulled from the router.
+
+User's create and update MDX content
+
+### Publishing
+Once the React components have been wired to consume MDX content, files can be pushed to the merged to the main branch of the associated git repo, allowing all the control of code merges and pushes, but for content.
+
+
