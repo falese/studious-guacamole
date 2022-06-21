@@ -13,7 +13,8 @@ module.exports = {
       "icon": "src/images/icon.png"
     }
   }, "gatsby-plugin-mdx", 
-    {
+    
+  {
     resolve: 'gatsby-source-filesystem',
     options: {
       "name": "pages",
@@ -26,12 +27,22 @@ module.exports = {
     },
 
     __key: "pages"
-  },"gatsby-plugin-image",{
+  },"gatsby-plugin-image",
+  {
   resolve: 'gatsby-source-filesystem',
   options: {
     "name": "specs",
     "path": "./specs/"
   },
+  
+},
+{
+  resolve: 'gatsby-source-filesystem',
+  options: {
+    "name": "content",
+    "path": "./content/"
+  },
+  
 },
   "gatsby-plugin-sharp",]
 };

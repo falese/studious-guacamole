@@ -21,7 +21,7 @@ const DocPage = ({ data }) => {
 }
 export const query = graphql`
 query ($id: String) {
-  mdx(id: {eq: $id}) {
+  mdx(id: {eq: $id}, frontmatter: {meta: {eq: "doc"}}) {
     frontmatter {
       title
       date(formatString: "MMMM D, YYYY")
